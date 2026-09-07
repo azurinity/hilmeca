@@ -1,0 +1,38 @@
+.button {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+
+  cursor: default;
+  appearance: none;
+  -webkit-appearance: none;
+  outline: none;
+
+  background-color: var(--button-bg, var(--background-surface));
+
+  will-change: background-color;
+
+  transition: background-color 0.16s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.button[data-tone='light'] {
+  --button-tone-hover-color: color-mix(in srgb, var(--button-bg, var(--background-surface)) 92%, black 8%);
+}
+
+.button[data-tone='dark'] {
+  --button-tone-hover-color: color-mix(in srgb, var(--button-bg, var(--background-surface)) 85%, white 15%);
+}
+
+.button:hover {
+  background-color: var(--button-hover-color, var(--button-tone-hover-color));
+}
+
+.button:disabled:hover {
+  background-color: var(--button-bg, var(--background-surface));
+}
+
+@supports not (background-color: color-mix(in srgb, red, blue)) {
+  .button[data-tone='light']:hover { filter: brightness(0.94); }
+  .button[data-tone='dark']:hover { filter: brightness(1.12); }
+}

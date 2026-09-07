@@ -1,7 +1,7 @@
 # Project Specification Document
 
 ## Project Name
-**Local Embodied Conversational Agent (ECA) / Private AI VTuber System**
+**Local Embodied Conversational Agent (ECA) / Private AI Conversation System**
 **Technical Name: HILM-ECA (Hardware-Isolated, Local Multimodal Embodied Conversational Agent**
 
 ## Target Deployment

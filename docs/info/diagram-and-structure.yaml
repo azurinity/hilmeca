@@ -1,0 +1,166 @@
+# ==============================================================================
+# HILM-ECA ARCHITECTURE TOPOLOGY & DATA FLOW SPECIFICATION
+# ==============================================================================
+
+1. SYSTEM STAGES & NODE SPECIFICATIONS
+--------------------------------------------------------------------------------
+[INPUT: Sensory & Perception]
+  - Node: Text
+      - Technology: Electron / Web UI[cite: 1, 2]
+      - Connected To: Voice (STT), Local Multimodal LLM
+
+  - Node: Voice (STT)
+      - Technology: Faster-Whisper @ int8[cite: 2]
+      - Connected To: Text (Input), Audio Tone Gen, Local Multimodal LLM
+
+  - Node: Audio Tone Gen
+      - Technology: Wav2Vec2 CPU[cite: 2]
+      - Connected To: Voice (STT), Local Multimodal LLM
+
+  - Node: Video/Image
+      - Technology: Live video feed or Image[cite: 2]
+      - Connected To: Local Multimodal LLM
+
+[CORE: Brain & Cognition]
+  - Node: Local Multimodal LLM
+      - Format: 4-bit native GGUF[cite: 2]
+      - Engine: Ollama LLM engine[cite: 1, 2]
+      - Target Models:
+          * qwen3-vl:8b[cite: 2]
+          * qwen3.5:9b[cite: 2]
+      - Connected To:
+          * Text (Result)
+          * Synthesizer: TTS
+          * Vocal -> Lip Sync
+          * Animations & Rig
+          * Image (Result)
+
+[RESULT: Processing & Expression]
+  - Node: Text (Result)
+      - Protocol/Interface: Local WebSocket rest API[cite: 1]
+      - Connected To: Output
+
+  - Node: Synthesizer: TTS
+      - Engine: Kokoro-82M[cite: 2]
+      - Connected To: Virtual Audio
+
+  - Node: Virtual Audio
+      - Interface: VBCable (Output & Input)[cite: 2]
+      - Connected To: Voice (Result)
+
+  - Node: Voice (Result)
+      - Engine: w-okada VCClient: RVC V2[cite: 2]
+      - Connected To: Output
+
+  - Node: Vocal -> Lip Sync
+      - Engine: wawa-lipsync[cite: 2]
+      - Connected To: Animations & Rig
+
+  - Node: Animations & Rig
+      - Rendering Framework: @pixiv/three-vrm + Three.js[cite: 2]
+      - Connected To: Output
+
+  - Node: Image (Result)
+      - Scope: Image search & vision[cite: 2]
+      - Connected To: Output
+
+  - Node: Output
+      - Enclosure Targets:
+          * Electron Forge UI[cite: 1, 2]
+          * Web UI[cite: 1, 2]
+          * Speakers[cite: 2]
+
+
+2. GRAPHICAL ASCII ROUTING DIAGRAM
+--------------------------------------------------------------------------------
++------------------------------------------------------------------------------+
+| INPUT (Sensory & Perception)                                                 |
+|                                                                              |
+|  +------------------+     +-----------------------+     +------------------+ |
+|  | Text             | <-> | Voice (STT)           | <-> | Audio Tone Gen   | |
+|  | Electron / Web UI|     | Faster-Whisper @ int8 |     | Wav2Vec2 CPU     | |
+|  +--------+---------+     +-----------+-----------+     +--------+---------+ |
+|           |                           |                          |           |
+|           +-----------------+         |         +----------------+           |
+|                             |         |         |                            |
+|  +------------------+       |         |         |                            |
+|  | Video/Image      | ------|---------|---------+                            |
+|  | Live feed/Image  |       |         |                                      |
+|  +--------+---------+       |         |                                      |
++-----------|-----------------|---------|--------------------------------------+
+            |                 |         |
+            v                 v         v
++------------------------------------------------------------------------------+
+| CORE (Brain & Cognition)                                                     |
+|                                                                              |
+|  +------------------------------------------------------------------------+  |
+|  | Local Multimodal LLM                                                   |  |
+|  | - 4-bit native GGUF                                                    |  |
+|  | - via Ollama LLM engine: qwen3-vl:8b | qwen3.5:9b                        |  |
+|  +-----------------------------------+------------------------------------+  |
++--------------------------------------|---------------------------------------+
+                                       |
+    +-----------------+----------------+----------------+-----------------+
+    |                 |                                 |                 |
+    v                 v                                 v                 v
++------------------------------------------------------------------------------+
+| RESULT (Processing & Expression)                                             |
+|                                                                              |
+|  +---------------------+   +------------------+   +-----------------------+  |
+|  | Text                |   | Synthesizer: TTS |   | Vocal -> Lip Sync     |  |
+|  | Local WS rest API   |   | Kokoro-82M       |   | wawa-lipsync          |  |
+|  +----------+----------+   +--------+---------+   +-----------+-----------+  |
+|             |                       |                         |              |
+|             |                       v                         v              |
+|             |              +------------------+   +-----------------------+  |
+|             |              | Virtual Audio    |   | Animations & Rig      |  |
+|             |              | VBCable Out/In   |   | @pixiv/three-vrm      |  |
+|             |              +--------+---------+   | + Three.js            |  |
+|             |                       |             +-----------+-----------+  |
+|             |                       v                         |              |
+|             |              +------------------+               |              |
+|             |              | Voice            |               |              |
+|             |              | w-okada VCClient |               |              |
+|             |              | (RVC V2)         |               |              |
+|             |              +--------+---------+               |              |
+|             |                       |                         |              |
+|  +----------v----------+            |                         |              |
+|  | Image               |            |                         |              |
+|  | Image search        |            |                         |              |
+|  | & vision            |            |                         |              |
+|  +----------+----------+            |                         |              |
+|             |                       |                         |              |
+|             +-------------------+   |   +---------------------+              |
+|                                 |   |   |                                    |
+|                                 v   v   v                                    |
+|                         +-----------------------+                            |
+|                         | Output                |                            |
+|                         | - Electron Forge UI   |                            |
+|                         | - Web UI              |                            |
+|                         | - Speakers            |                            |
+|                         +-----------------------+                            |
++------------------------------------------------------------------------------+
+
+
+3. DIRECTED DATA PIPELINE CONNECTIONS
+--------------------------------------------------------------------------------
+  Source Node           -> Target Node             | Description / Data Path
+--------------------------------------------------------------------------------
+  Text (Input)          -> Local Multimodal LLM    | Text prompt input
+  Voice (STT)           -> Text (Input)            | Audio-to-text bidirectional link
+  Voice (STT)           -> Audio Tone Gen          | Raw speech tone linkage
+  Voice (STT)           -> Local Multimodal LLM    | Speech transcription stream
+  Audio Tone Gen        -> Local Multimodal LLM    | Tone and emotion feature vectors
+  Video/Image           -> Local Multimodal LLM    | Static frames and video feed
+  Local Multimodal LLM  -> Text (Result)           | Token generation stream (WS/REST)
+  Local Multimodal LLM  -> Synthesizer: TTS        | Text response to TTS pipeline
+  Local Multimodal LLM  -> Vocal -> Lip Sync       | Phoneme / expression context
+  Local Multimodal LLM  -> Animations & Rig        | Rig motion triggers
+  Local Multimodal LLM  -> Image (Result)          | Visual search and query processing
+  Synthesizer: TTS      -> Virtual Audio           | Synthesized raw audio buffer
+  Virtual Audio         -> Voice (Result)          | Audio pass-through (VB-Cable)
+  Voice (Result)        -> Output                  | Transformed voice stream -> Speakers
+  Vocal -> Lip Sync     -> Animations & Rig        | Real-time viseme blendshape offsets
+  Animations & Rig      -> Output                  | Rendered WebGL output -> UI Viewport
+  Text (Result)         -> Output                  | Text chat payload -> Electron/Web UI
+  Image (Result)        -> Output                  | Processed image view -> UI Viewport
