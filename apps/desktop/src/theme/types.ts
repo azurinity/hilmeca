@@ -26,6 +26,7 @@ export interface Theme {
   background: {
     canvas: string;
     surface: string;
+    surfaceVariant: string;
     surfaceRaised: string;
   };
 

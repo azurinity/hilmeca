@@ -1,7 +1,7 @@
 // src/preload.ts
 import { contextBridge, ipcRenderer } from 'electron';
 
-contextBridge.exposeInMainWorld('desktopAPI', {
+contextBridge.exposeInMainWorld('electronAPI', {
   ping: () => ipcRenderer.invoke('app:ping'),
   updateTitleBar: (colors: { color: string; symbolColor: string }) => {
     ipcRenderer.send('update-titlebar', colors);

@@ -13,7 +13,7 @@ interface ThemeContextProps {
 
 const ThemeContext = createContext<ThemeContextProps | undefined>(undefined);
 
-const THEME_STORAGE_KEY = 'scientifix-app-theme';
+const THEME_STORAGE_KEY = 'hilmeca-app-theme';
 
 export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [mode, setMode] = useState<ThemeMode>(() => {

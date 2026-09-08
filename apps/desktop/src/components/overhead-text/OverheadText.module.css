@@ -1,0 +1,5 @@
+.overhead {
+  font-family: 'Default-Regular', sans-serif;
+  font-size: var(--font-overhead);
+  letter-spacing: 0.05em;
+}

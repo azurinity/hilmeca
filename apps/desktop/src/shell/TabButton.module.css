@@ -1,0 +1,74 @@
+.tabButton {
+  flex-shrink: 0;
+  width: auto;
+  height: var(--space-xxl);
+  background-color: var(--background-canvas) !important;
+
+  border-radius: var(--space-sm);
+  padding-left: var(--space-md);
+  padding-right: var(--space-sm);
+  padding-top: var(--space-xs);
+  padding-bottom: var(--space-xs);
+  gap: var(--space-sm);
+
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.tabButton > span {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  gap: var(--space-sm);
+  width: 100%;
+}
+
+.tabButtonSelected.tabButtonSelected {
+  background-color: var(--background-surface-variant) !important;
+}
+
+.tabIcon {
+  width: auto;
+  height: 100%;
+  aspect-ratio: 1;
+  background: transparent;
+}
+
+.tabText {
+  font-family: 'Default-Regular', sans-serif;
+  font-size: var(--font-body);
+  text-align: center;
+  color: var(--text-secondary) !important;
+  margin-right: var(--space-xs);
+}
+
+.tabTextSelected.tabTextSelected {
+  color: var(--text-primary) !important;
+}
+
+.tabCloseButton {
+  width: var(--space-xl);
+  height: var(--space-xl);
+  aspect-ratio: 1;
+  background: transparent;
+  /* background-color: var(--background-canvas) !important; */
+
+  box-sizing: border-box;
+  border-radius: 9999px;
+  padding: var(--space-xs) !important;
+
+  display: inline-flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+/* .tabCloseButtonSelected.tabCloseButtonSelected {
+  background-color: var(--background-surface-variant) !important;
+} */

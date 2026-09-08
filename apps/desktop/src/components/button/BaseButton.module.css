@@ -1,5 +1,12 @@
 .button {
-  display: flex;
+  border: none;
+  padding: 0;
+  margin: 0;
+  font: inherit;
+  color: inherit;
+  text-align: inherit;
+
+  display: inline-flex;
   flex-direction: row;
   align-items: center;
   justify-content: center;
@@ -13,26 +20,27 @@
 
   will-change: background-color;
 
-  transition: background-color 0.16s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: background-color 0.22s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
 .button[data-tone='light'] {
-  --button-tone-hover-color: color-mix(in srgb, var(--button-bg, var(--background-surface)) 92%, black 8%);
+  --button-tone-hover-color: color-mix(in srgb, var(--button-bg, var(--background-surface)) 95%, black 5%);
 }
 
 .button[data-tone='dark'] {
-  --button-tone-hover-color: color-mix(in srgb, var(--button-bg, var(--background-surface)) 85%, white 15%);
+  --button-tone-hover-color: color-mix(in srgb, var(--button-bg, var(--background-surface)) 91%, white 9%);
 }
 
 .button:hover {
-  background-color: var(--button-hover-color, var(--button-tone-hover-color));
+  background-color: var(--button-hover-color, var(--button-tone-hover-color, var(--button-bg))) !important;
+  transition: background-color 0.14s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .button:disabled:hover {
-  background-color: var(--button-bg, var(--background-surface));
+  background-color: var(--button-bg, var(--background-surface)) !important;
 }
 
 @supports not (background-color: color-mix(in srgb, red, blue)) {
-  .button[data-tone='light']:hover { filter: brightness(0.94); }
-  .button[data-tone='dark']:hover { filter: brightness(1.12); }
+  .button[data-tone='light']:hover { filter: brightness(0.96) !important; }
+  .button[data-tone='dark']:hover { filter: brightness(1.07) !important; }
 }

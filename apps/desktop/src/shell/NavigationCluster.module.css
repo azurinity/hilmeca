@@ -1,0 +1,52 @@
+.cluster {
+  width: auto;
+  height: auto;
+  background: transparent;
+
+  position: absolute;
+  top: calc(4 * var(--space-xl) - var(--space-sm));
+  left: var(--space-lg);
+  gap: var(--space-sm);
+  
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  align-items: center;
+  overflow: hidden;
+  z-index: 19;
+}
+
+.majorIcon {
+  width: 100%;
+  height: 100%;
+  aspect-ratio: 1;
+  background: transparent;
+}
+
+.button {
+  aspect-ratio: 1;
+  background-color: var(--background-surface) !important;
+
+  border-radius: 9999px;
+  border: 1px solid var(--border-default) !important;
+  
+  display: inline-flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+.buttonMajor.buttonMajor {
+  width: calc(2 * var(--space-xl));
+  height: calc(2 * var(--space-xl));
+  padding: calc(var(--space-sm) + var(--space-xxs)) !important;
+}
+
+.buttonMinor.buttonMinor {
+  width: var(--space-xxl);
+  height: var(--space-xxl);
+  padding: calc(var(--space-sm) - var(--space-xxs)) !important;
+}

@@ -1,6 +1,8 @@
 import {
   ChevronLeft,
+  ChevronRight,
   Ellipsis,
+  EllipsisVertical,
   House,
   Settings,
   Search,
@@ -12,6 +14,17 @@ import {
   Check,
   Menu,
   TextAlignJustify,
+  MessagesSquare,
+  MessageSquareText,
+  SquarePen,
+  Waypoints,
+  LibraryBig,
+  BookMarked,
+  Star,
+  Wrench,
+  Power,
+  PanelLeftClose,
+  PanelLeftOpen,
 } from 'lucide-react';
 
 /**
@@ -20,7 +33,9 @@ import {
  */
 export const IconRegistry = {
   ChevronLeft,
+  ChevronRight,
   Ellipsis,
+  EllipsisVertical,
   House,
   Settings,
   Search,
@@ -32,6 +47,17 @@ export const IconRegistry = {
   Check,
   Menu,
   TextAlignJustify,
+  MessagesSquare,
+  MessageSquareText,
+  SquarePen,
+  Waypoints,
+  LibraryBig,
+  BookMarked,
+  Star,
+  Wrench,
+  Power,
+  PanelLeftClose,
+  PanelLeftOpen,
   // Add more icons here as you need them
 } as const;
 

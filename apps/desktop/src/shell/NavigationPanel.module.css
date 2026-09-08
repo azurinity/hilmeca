@@ -1,0 +1,283 @@
+.panelWrapper {
+  width: 280px;
+  height: 100%;
+  flex: 0 0 auto;
+  overflow: hidden;
+  background-color: var(--background-surface);
+  transition: width 300ms cubic-bezier(0.16, 1, 0.3, 1);
+  box-sizing: border-box;
+  z-index: 20;
+}
+.panelWrapper.collapsed {
+  width: 0;
+  transition: width 240ms cubic-bezier(0.7, 0, 0.84, 0); /* collapse: ease-in-expo — accelerates smoothly out of view */
+}
+
+/* Option (2): panel is shown but removed from the Shell's flex layout
+   entirely — `.restOfLayout`'s only remaining flex item is `.contents`
+   (flex: 1), so it fills the freed width automatically. The panel then
+   renders on top via its existing z-index. Note `position`/`top`/`left`
+   are deliberately absent from `.panelWrapper`'s transition list above, so
+   toggling this class never animates — it only ever snaps. */
+.panelWrapper.overlayMode {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.panelInner {
+  width: 280px;      /* fixed — never resizes, so nothing reflows/squishes */
+  height: 100%;
+  box-sizing: border-box;
+  transform: translateX(0);
+  transition: transform 300ms cubic-bezier(0.16, 1, 0.3, 1); /* matches wrapper's expand timing exactly */
+
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  align-items: center;
+}
+.panelWrapper.collapsed .panelInner {
+  transform: translateX(-100%); /* -100% resolves against panelInner's own 280px, not the parent */
+  transition: transform 240ms cubic-bezier(0.7, 0, 0.84, 0); /* matches wrapper's collapse timing exactly */
+}
+
+.titleGroup {
+  width: 100%;
+  height: calc(2 * var(--space-xl));
+  flex-shrink: 0;
+
+  margin-bottom: var(--space-sm);
+
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.innerTitleGroup {
+  width: auto;
+  height: 100%;
+
+  display: inline-flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: center;
+}
+
+.innerTitleGroup.itgLeft {
+  justify-content: flex-start;
+  padding-left: var(--space-sm);
+  gap: var(--space-xs);
+}
+
+.innerTitleGroup.itgRight {
+  justify-content: flex-end;
+  padding-right: var(--space-sm);
+  gap: var(--space-sm);
+}
+
+.majorButton {
+  width: calc(var(--space-xxl) + var(--space-sm));
+  height: calc(var(--space-xxl) + var(--space-sm));
+  aspect-ratio: 1;
+
+  padding: 8px !important;
+
+  background-color: var(--background-surface) !important;
+  border-radius: 9999px;
+}
+
+.majorIcon {
+  width: 100%;
+  height: 100%;
+  aspect-ratio: 1;
+}
+
+.majorTitle {
+  color: var(--text-primary);
+  text-align: left;
+  font-family: 'Default-Medium';
+  font-size: var(--font-subheader);
+}
+
+.titleRightButton {
+  width: calc(var(--space-xxl) + var(--space-xs));
+  height: calc(var(--space-xxl) + var(--space-xs));
+  aspect-ratio: 1;
+
+  padding: 8px !important;
+  background-color: var(--background-surface) !important;
+  border-radius: 9999px;
+}
+
+.categoryMenuGroup {
+  width: 100%;
+  flex-shrink: 0;
+  height: auto;
+  box-sizing: border-box; /* fix: keep padding inside the 100% width instead of adding to it */
+
+  padding-left: var(--space-md);
+  padding-right: var(--space-md);
+  margin-bottom: var(--space-md);
+  gap: var(--space-md);
+
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  align-items: flex-start;
+  overflow: hidden;
+}
+
+.categoryMenuSubgroup {
+  width: 100%;
+  height: auto;
+
+  gap: var(--space-md);
+
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  align-items: stretch;
+  overflow: hidden;
+}
+
+.categoryMenu {
+  flex: 1 1 auto;
+  height: calc(4 * var(--space-xl));
+
+  background-color: var(--background-surface-variant) !important;
+  border-radius: var(--radius-lg);
+  padding: var(--space-sm) !important;
+
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+/* fix: ContentScaleButton always wraps its children in its own internal <span>
+   (styled by its own module as display:flex, row-direction). That span — not
+   .categoryMenu — is the actual flex parent of the icon/text, so .categoryMenu's
+   flex-direction: column above never reached them. Target that span directly
+   via a scoped descendant selector (higher specificity than the component's
+   own .content class, so no !important needed) to stack icon-over-text. */
+.categoryMenu > span {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: var(--space-xs);
+  width: 100%;
+}
+
+.categoryMenuText {
+  max-width: 100%;
+  font-family: 'Default-Regular';
+  font-size: var(--font-body);
+  color: var(--text-primary);
+  text-align: center;
+  margin-top: var(--space-xs);
+}
+
+.conversationButton {
+  flex-shrink: 0;
+  background-color: var(--background-surface) !important;
+
+  border-radius: var(--space-lg);
+  box-sizing: border-box;
+
+  padding-top: var(--space-sm);
+  padding-bottom: var(--space-sm);
+  padding-left: var(--space-sm);
+  padding-right: var(--space-sm);
+  gap: var(--space-md);
+
+  display: inline-flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  align-items: center;
+  overflow: hidden;
+}
+
+.conversationButtonS {
+  width: calc(100% - calc(2 * var(--space-md)));
+  flex-shrink: 0;
+}
+
+.conversationButtonN {
+  width: 100%;
+}
+
+.conversationButtonSelected.conversationButtonSelected {
+  background-color: var(--background-surface-variant) !important;
+}
+
+.conversationButtonText {
+  max-width: calc(100% - var(--space-lg) - var(--space-xxs) - var(--space-md));
+  color: var(--text-primary);
+  text-align: left;
+
+  font-family: 'Default-Regular', sans-serif;
+  font-size: var(--font-h4);
+  letter-spacing: 0;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.conversationButtonIcon {
+  width: calc(var(--space-lg) + var(--space-xxs));
+  height: calc(var(--space-lg) + var(--space-xxs));
+  aspect-ratio: 1;
+}
+
+.conversationList {
+  width: 100%;
+  flex: 1 1 auto;
+  min-height: 0; /* allow this flex item to shrink below content height so overflow-y can scroll */
+  box-sizing: border-box;
+
+  padding-left: var(--space-md);
+  padding-right: var(--space-md);
+
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  align-items: flex-start;
+
+  overflow-x: hidden;
+  overflow-y: scroll;
+}
+
+.conversationTypicalOverhead {
+  flex-shrink: 0;
+  width: calc(100% - var(--space-xxl) - var(--space-xs));
+  color: var(--text-secondary);
+  text-align: left;
+  margin-top: var(--space-md);
+  margin-bottom: var(--space-sm);
+}
+
+.separatorLine {
+  width: 88%;
+  height: 0.5px;
+  background-color: var(--border-default);
+  border-radius: 9999px;
+
+  margin-top: var(--space-lg);
+  margin-bottom: var(--space-md);
+}
+
+.bottomExtraGap {
+  margin-bottom: var(--space-lg);
+}

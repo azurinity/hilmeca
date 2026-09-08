@@ -1,10 +1,10 @@
 .scale {
   transform: scale(1);
   will-change: transform;
-  transition: transform 0.12s cubic-bezier(0.25, 0.8, 0.25, 1);
+  transition: transform 0.2s cubic-bezier(0.33, 1, 0.68, 1);
 }
 
 .scale:active {
-  transform: scale(0.96);
-  transition: transform 0.05s cubic-bezier(0.25, 0.8, 0.25, 1);
+  transform: scale(var(--scale-active, 0.96));
+  transition: transform 0.08s cubic-bezier(0.16, 1, 0.3, 1);
 }

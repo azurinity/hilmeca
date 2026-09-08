@@ -23,9 +23,10 @@ export const lightTheme: Theme = {
     },
   },
   background: {
-    canvas: '#F2F2F2',
-    surface: '#F8F9FA',
-    surfaceRaised: '#FFFFFF',
+    canvas: '#EBECEE', // Muted neutral-cool backdrop
+    surface: '#F5F6F8', // Soft off-white main surface
+    surfaceVariant: '#EEF0F4', // Low-chroma container/input background
+    surfaceRaised: '#FFFFFF', // Clean floating panels & modals
   },
   text: {
     primary: '#0F172A',
@@ -34,7 +35,7 @@ export const lightTheme: Theme = {
     muted: '#B2BAC5',
   },
   border: {
-    default: '#E2E8F0',
+    default: '#D1D5DB', // Subtle desaturated border
     loading: '#60A5FA',
   },
   components: {
@@ -99,9 +100,10 @@ export const darkTheme: Theme = {
     },
   },
   background: {
-    canvas: '#050505',
-    surface: '#191c1c',
-    surfaceRaised: '#020617',
+    canvas: '#090A0C', // Deep neutral dark backdrop
+    surface: '#101215', // Low-saturation main panel
+    surfaceVariant: '#1A1D22', // Muted inset container for inputs/headers
+    surfaceRaised: '#22262E', // Comfortable elevated floating surfaces
   },
   text: {
     primary: '#F9FAFB',
@@ -110,7 +112,7 @@ export const darkTheme: Theme = {
     muted: '#4E5258',
   },
   border: {
-    default: '#1F2937',
+    default: '#22262E', // Toned-down dark border
     loading: '#3B82F6',
   },
   components: {

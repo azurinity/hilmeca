@@ -1,6 +1,12 @@
 import React from 'react';
-import { RootLayout } from './RootLayout';
+
+import { Shell } from '../shell/Shell';
+import { AppWindowProvider } from '../context/AppWindowContext';
 
 export const App: React.FC = () => {
-  return <RootLayout />;
+  return (
+    <AppWindowProvider>
+      <Shell />
+    </AppWindowProvider>
+  );
 };

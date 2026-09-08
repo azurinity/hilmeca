@@ -4,6 +4,7 @@ import {
   useLayoutEffect,
   useCallback,
   useMemo,
+  type AnchorHTMLAttributes,
   type ButtonHTMLAttributes,
   type CSSProperties,
   type Ref,
@@ -18,25 +19,42 @@ export interface BaseButtonProps extends ButtonHTMLAttributes<HTMLButtonElement>
   colorTransition?: boolean;
   /** Overrides the luminance-based lighten/darken hover behavior with a fixed color. */
   hoverColor?: string;
+  useAnchorInstead?: boolean;
 }
+
+type BaseButtonElement = HTMLButtonElement | HTMLAnchorElement;
 
 const LUMINANCE_THRESHOLD = 0.5;
 
-function mergeRefs<T>(...refs: Array<Ref<T> | undefined>) {
-  return (node: T) => {
-    for (const ref of refs) {
-      if (!ref) continue;
-      if (typeof ref === 'function') ref(node);
-      else (ref as React.MutableRefObject<T | null>).current = node;
-    }
-  };
+function setRefNode<T>(ref: Ref<T> | undefined, node: T | null) {
+  if (!ref) return;
+  if (typeof ref === 'function') ref(node);
+  else (ref as React.RefObject<T | null>).current = node;
 }
 
-export const BaseButton = forwardRef<HTMLButtonElement, BaseButtonProps>(
-  ({ children, className, style, colorTransition = true, hoverColor, ...props }, forwardedRef) => {
+export const BaseButton = forwardRef<BaseButtonElement, BaseButtonProps>(
+  (
+    {
+      children,
+      className,
+      style,
+      colorTransition = true,
+      hoverColor,
+      useAnchorInstead = false,
+      ...props
+    },
+    forwardedRef,
+  ) => {
     const { theme } = useTheme();
-    const innerRef = useRef<HTMLButtonElement>(null);
-    const setRef = useCallback(mergeRefs(innerRef, forwardedRef), [forwardedRef]);
+    const innerRef = useRef<BaseButtonElement>(null);
+
+    const setRef = useCallback(
+      (node: BaseButtonElement | null) => {
+        innerRef.current = node;
+        setRefNode(forwardedRef, node);
+      },
+      [forwardedRef],
+    );
 
     useLayoutEffect(() => {
       const node = innerRef.current;
@@ -44,18 +62,40 @@ export const BaseButton = forwardRef<HTMLButtonElement, BaseButtonProps>(
 
       if (!colorTransition || hoverColor) {
         delete node.dataset.tone;
+        node.style.removeProperty('--button-bg');
         return;
       }
 
+      // Temporarily strip dataset.tone to bypass :hover styles while measuring base background
+      const previousTone = node.dataset.tone;
+      delete node.dataset.tone;
+
       const resolvedBg = getComputedStyle(node).backgroundColor;
+
+      // Store resolved base background for CSS color-mix fallback
+      node.style.setProperty('--button-bg', resolvedBg);
+
       const luminance = getRelativeLuminance(resolvedBg);
       node.dataset.tone = luminance > LUMINANCE_THRESHOLD ? 'light' : 'dark';
-    }, [theme, style, colorTransition, hoverColor]);
+    }, [theme, style, className, colorTransition, hoverColor]);
 
     const mergedStyle = useMemo<CSSProperties | undefined>(() => {
       if (!hoverColor) return style;
       return { ...style, '--button-hover-color': hoverColor } as CSSProperties;
     }, [style, hoverColor]);
+
+    if (useAnchorInstead === true) {
+      return (
+        <a
+          ref={setRef}
+          className={clsx(styles.button, className)}
+          style={mergedStyle}
+          {...(props as AnchorHTMLAttributes<HTMLAnchorElement>)}
+        >
+          {children}
+        </a>
+      );
+    }
 
     return (
       <button
