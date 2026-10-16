@@ -15,6 +15,12 @@ export const lightTheme: Theme = {
       border: '#10B981',
       text: '#16A34A',
     },
+    warning: {
+      solid: '#D97706',
+      surface: '#FEF3C7',
+      border: '#F59E0B',
+      text: '#D97706',
+    },
     error: {
       solid: '#DC2626',
       surface: '#FEE2E2',
@@ -91,6 +97,12 @@ export const darkTheme: Theme = {
       surface: '#064E3B',
       border: '#34D399',
       text: '#4ADE80',
+    },
+    warning: {
+      solid: '#FBBF24',
+      surface: '#78350F',
+      border: '#FBBF24',
+      text: '#FDE68A',
     },
     error: {
       solid: '#F87171',

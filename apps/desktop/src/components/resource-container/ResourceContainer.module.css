@@ -1,0 +1,133 @@
+.root {
+  box-sizing: border-box;
+  position: relative;
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  height: auto;
+  min-height: 0;
+
+  padding-left: var(--space-sm);
+  padding-right: var(--space-sm);
+
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  align-items: center;
+  overflow: hidden;
+  gap: var(--space-sm);
+}
+.row {
+  box-sizing: border-box;
+  width: calc(100% - var(--space-sm)); /* was calc(100% - var(--space-sm)) */
+  gap: var(--space-sm); /* prevents extraText and valueText from touching */
+  min-width: 0;
+  max-width: 100%;
+  height: auto;
+  min-height: 0;
+
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+  overflow: hidden;
+}
+.rowTop {
+  align-items: flex-end;
+}
+.rowBottom {
+  align-items: flex-start;
+}
+.column {
+  flex: 1;
+  min-width: 0;
+  max-width: 100%;
+  height: auto;
+  min-height: 0;
+
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  align-items: flex-end;
+  overflow: hidden;
+  gap: var(--space-sm);
+}
+.icon {
+  flex: 0 0 auto;
+  aspect-ratio: 1;
+}
+.title {
+  flex: 1;
+  min-width: 0;
+  max-width: 100%;
+  margin: 0;
+  line-height: 1.2;
+  color: var(--text-primary) !important;
+
+  font-family: 'Default-Medium';
+  font-size: var(--font-body);
+  text-align: left;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.subtitle {
+  width: auto;
+  min-width: 0;
+  max-width: 100%;
+  min-height: 0;
+  line-height: 1.2;
+  color: var(--text-disabled) !important;
+
+  font-family: 'Default-Medium';
+  font-size: var(--font-overhead);
+  text-align: right;
+}
+.resourceGroup {
+  width: 100%;
+  min-width: 0;
+  height: auto;
+  min-height: 0;
+
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: center;
+  gap: var(--space-sm);
+}
+.extraText {
+  flex: 1 1 auto; /* shrinks and truncates instead of pushing valueText out */
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+
+  /* width: auto; */
+  min-width: 0;
+  max-width: 100%;
+  min-height: 0;
+  line-height: 1.2;
+  color: var(--text-disabled) !important;
+
+  font-family: 'Default-Medium';
+  font-size: var(--font-overhead);
+  text-align: left;
+}
+.valueText {
+  flex: 0 0 auto;           /* never shrinks, so it can't be clipped */
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums; /* stops width jitter as digits change */
+
+  /* width: auto; */
+  min-width: 0;
+  min-height: 0;
+  line-height: 1.2;
+  color: var(--text-secondary) !important;
+
+  font-family: 'Default-Medium';
+  font-size: var(--font-overhead);
+  text-align: right;
+}

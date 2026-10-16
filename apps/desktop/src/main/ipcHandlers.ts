@@ -1,9 +1,11 @@
 // src/main/ipcHandlers.ts
 import { ipcMain, BrowserWindow } from 'electron';
 import { setupNetworkIPC } from './ipc/network';
+import { setupHardwareIPC } from './ipc/hardware';
 
 export function registerIpcHandlers(): void {
   setupNetworkIPC();
+  setupHardwareIPC();
 
   ipcMain.handle('app:ping', async (): Promise<string> => {
     return 'pong';

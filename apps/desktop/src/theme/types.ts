@@ -20,6 +20,7 @@ export interface Theme {
 
   status: {
     success: StatusColors;
+    warning: StatusColors;
     error: StatusColors;
   };
 

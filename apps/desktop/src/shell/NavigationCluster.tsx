@@ -5,6 +5,8 @@ import styles from './NavigationCluster.module.css';
 import appLogo from '../assets/icons/app/splash/icon-splash-standard.png';
 
 import { useTheme } from '../theme/ThemeProvider';
+import { useTabs } from '../features/tabs';
+
 import { ContentScaleButton } from '../components/button';
 import { ResolvableIcon } from '../components/icon';
 
@@ -15,9 +17,13 @@ export interface NavigationCluster extends HTMLAttributes<HTMLDivElement> {
 
 export function NavigationCluster({ onMajorClick, onMinorClick, className }: NavigationCluster) {
   const { theme } = useTheme();
+  const { openTab } = useTabs();
 
   const handleMajorClick = useCallback(
-    (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => onMajorClick?.(e),
+    (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+      openTab({ tabType: 'home', dedupeKey: 'home' });
+      onMajorClick?.(e);
+    },
     [onMajorClick],
   );
   const handleMinorClick = useCallback(

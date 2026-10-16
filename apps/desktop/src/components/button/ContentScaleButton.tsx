@@ -10,7 +10,9 @@ export interface ContentScaleButtonProps extends BaseButtonProps {
 }
 
 export const ContentScaleButton = forwardRef<HTMLButtonElement, ContentScaleButtonProps>(
-  ({ children, className, style, scaleTransition = true, scaleValue, ...props }, ref) => {
+  ({ children, className, style, disabled, scaleTransition, scaleValue, ...props }, ref) => {
+    const shouldScaleTransition =
+      typeof scaleTransition === 'boolean' ? scaleTransition : !disabled;
     const dynamicStyle =
       scaleValue !== undefined
         ? ({ ...style, '--scale-active': scaleValue } as CSSProperties)
@@ -21,9 +23,10 @@ export const ContentScaleButton = forwardRef<HTMLButtonElement, ContentScaleButt
         ref={ref}
         className={clsx(styles.host, className)}
         style={dynamicStyle}
+        disabled={disabled}
         {...props}
       >
-        <span className={clsx(scaleTransition && styles.content)}>{children}</span>
+        <span className={clsx(shouldScaleTransition && styles.content)}>{children}</span>
       </BaseButton>
     );
   },

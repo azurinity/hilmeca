@@ -12,8 +12,8 @@ export function OverheadText({ children, text, className, ...props }: OverheadTe
   ).toUpperCase();
 
   return (
-    <span className={clsx(styles.overhead, typeof className === 'string' && className)} {...props}>
+    <p className={clsx(styles.overhead, typeof className === 'string' && className)} {...props}>
       {finalText}
-    </span>
+    </p>
   );
 }

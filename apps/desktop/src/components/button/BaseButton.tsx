@@ -13,7 +13,7 @@ import clsx from 'clsx';
 import styles from './BaseButton.module.css';
 
 import { useTheme } from '../../theme/ThemeProvider';
-import { getRelativeLuminance } from '../../features/colors';
+import { getRelativeLuminance } from '../../utils/colors';
 
 export interface BaseButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   colorTransition?: boolean;
@@ -66,13 +66,9 @@ export const BaseButton = forwardRef<BaseButtonElement, BaseButtonProps>(
         return;
       }
 
-      // Temporarily strip dataset.tone to bypass :hover styles while measuring base background
-      const previousTone = node.dataset.tone;
       delete node.dataset.tone;
 
       const resolvedBg = getComputedStyle(node).backgroundColor;
-
-      // Store resolved base background for CSS color-mix fallback
       node.style.setProperty('--button-bg', resolvedBg);
 
       const luminance = getRelativeLuminance(resolvedBg);
@@ -90,7 +86,7 @@ export const BaseButton = forwardRef<BaseButtonElement, BaseButtonProps>(
           ref={setRef}
           className={clsx(styles.button, className)}
           style={mergedStyle}
-          {...(props as AnchorHTMLAttributes<HTMLAnchorElement>)}
+          {...(props as unknown as AnchorHTMLAttributes<HTMLAnchorElement>)}
         >
           {children}
         </a>

@@ -21,7 +21,7 @@
   flex-wrap: nowrap;
   justify-content: space-between;
   align-items: center;
-  
+
   -webkit-app-region: drag;
   user-select: none;
   overflow: hidden;
@@ -39,15 +39,16 @@
   justify-content: flex-start;
   align-items: center;
   gap: var(--space-xs);
-  
+
   -webkit-app-region: no-drag;
 }
 
 .titleInfoContainer {
   position: absolute;
   top: 0;
+  left: 17.5%;
 
-  width: 100%;
+  width: 65%;
   height: 100%;
 
   display: flex;
@@ -56,12 +57,20 @@
   justify-content: center;
   align-items: center;
   gap: 0.5rem;
+
+  -webkit-app-region: drag;
+  user-select: none;
+  overflow: hidden;
 }
 
 .titleText {
   color: var(--text-secondary);
   text-align: left;
   font-size: var(--font-h4);
+
+  -webkit-app-region: drag;
+  user-select: none;
+  overflow: hidden;
 }
 
 .controlContainer {
@@ -73,7 +82,7 @@
   flex-wrap: nowrap;
   justify-content: flex-end;
   align-items: center;
-  
+
   -webkit-app-region: no-drag;
 }
 
@@ -153,8 +162,10 @@
 
 .viewport {
   flex: 1;
+  min-height: 0;
   width: 100%;
   background-color: var(--background-canvas);
+  position: relative;
 
   display: flex;
   flex-direction: column;
@@ -184,8 +195,8 @@
 
 /* 1. Root scrollbar container configuration */
 .tabContainer::-webkit-scrollbar {
-  width: 4px;              /* Width for vertical scrollbars */
-  height: 4px;             /* Height for horizontal scrollbars */
+  width: 4px; /* Width for vertical scrollbars */
+  height: 4px; /* Height for horizontal scrollbars */
   background: transparent; /* No background track container */
 }
 
@@ -198,16 +209,16 @@
 /* 3. Scrollbar Thumb (The actual draggable handle) */
 .tabContainer::-webkit-scrollbar-thumb {
   /* PLACEHOLDER COLOR: Swap this out with your theme token (e.g., var(--text-muted) or #444) */
-  background-color: var(--text-disabled); 
-  
-  border-radius: 9999px;   /* Ensures a smooth 50% pill capsule edge shape */
-  border: none;            /* Strips out native separator lines and margins */
+  background-color: var(--text-disabled);
+
+  border-radius: 9999px; /* Ensures a smooth 50% pill capsule edge shape */
+  border: none; /* Strips out native separator lines and margins */
 }
 
 /* 4. Hover states for the draggable handle */
 .tabContainer::-webkit-scrollbar-thumb:hover {
   /* PLACEHOLDER COLOR FOR HOVER STATE */
-  background-color: var(--text-muted); 
+  background-color: var(--text-muted);
 }
 
 /* 5. Scrollbar Buttons (Removes the Up/Down/Left/Right arrow buttons completely) */
@@ -220,4 +231,11 @@
 /* 6. Corner anchor space where horizontal and vertical scrollbars meet */
 .tabContainer::-webkit-scrollbar-corner {
   background: transparent;
+}
+
+.tabPaneEx {
+  flex: 1;
+  position: absolute;
+  inset: 0;
+  overflow: auto;
 }

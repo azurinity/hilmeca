@@ -1,0 +1,168 @@
+.root {
+  /* Shared tuning knobs. --ci-max-lines is overridden inline from the `lines` prop. */
+  --ci-pad-x: var(--space-md);
+  --ci-line-height: calc(var(--font-upper-body) * 1.4);
+  --ci-max-lines: 4;
+  --ci-actions-gap: var(--space-sm); /* spacing between buttons inside one left/right group */
+  --ci-no-actions-pad-top: var(--space-sm); /* extra top space when no side buttons exist */
+
+  position: relative; /* anchors the hidden measuring replica */
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  min-height: 0;
+  background-color: var(--background-surface);
+
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-xxl);
+
+  padding-top: var(--space-md);
+  padding-bottom: var(--space-md);
+  padding-left: var(--ci-pad-x);
+  padding-right: var(--ci-pad-x);
+
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: flex-start;
+  overflow: hidden;
+  gap: var(--space-md);
+}
+
+.mainLayout,
+.contextLayout,
+.contextLayoutSpace {
+  min-width: 0;
+  max-width: 100%;
+  min-height: 0;
+
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: center;
+  overflow: hidden;
+}
+.mainLayout,
+.contextLayout {
+  width: 100%;
+}
+.mainLayout,
+.contextLayoutSpace {
+  justify-content: flex-start;
+}
+.mainLayout {
+  gap: var(--space-sm);
+}
+.contextLayout {
+  justify-content: space-between;
+}
+.contextLayoutSpace {
+  flex: 0 1 auto;
+  gap: var(--space-md);
+}
+.contextLayoutGap {
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+}
+
+/* Wraps one or more left/right ActionButtons so they move between rows as a unit. */
+.actionGroup {
+  flex: 0 0 auto;
+  min-width: 0;
+
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  align-items: center;
+  gap: var(--ci-actions-gap);
+}
+
+/*
+ * Expanded rows have no side buttons, so the first text line would sit higher than it did in
+ * compact (where the textarea is vertically centered against a --space-xxl button).
+ * This inset keeps the first line at the same y-position across the mode switch.
+ */
+.mainLayoutInset {
+  padding-top: max(0px, calc((var(--space-xxl) - var(--ci-line-height)) / 2));
+}
+/*
+ * No left/right actions at all: the row is only one text line tall, so the text sits tight
+ * against the root's top padding. Applies in compact and expanded alike, so nothing jumps
+ * when the mode switches.
+ */
+.mainLayoutNoActions {
+  padding-top: var(--ci-no-actions-pad-top);
+}
+
+.mainTextarea {
+  appearance: none;
+  outline: none;
+
+  display: block;
+  flex: 1 1 0;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  color: var(--text-primary);
+
+  font-family: 'Default-Regular';
+  font-size: var(--font-upper-body);
+  line-height: var(--ci-line-height);
+
+  box-sizing: border-box;
+  resize: none;
+  overflow-x: hidden;
+  overflow-y: auto;
+
+  /* The textarea height follows its content, clamped by min/max-height below. */
+  field-sizing: content;
+  min-height: var(--ci-line-height);
+}
+.mainTextarea::placeholder {
+  color: var(--text-muted);
+  opacity: 1;
+}
+
+.mainTextareaCompact {
+  max-height: var(--ci-line-height);
+}
+.mainTextareaExpanded {
+  max-height: calc(var(--ci-max-lines) * var(--ci-line-height));
+}
+.mainTextareaNoActionsLeft {
+  padding-left: var(--space-sm);
+}
+.mainTextareaNoActionsRight {
+  padding-right: var(--space-sm);
+}
+
+/*
+ * Hidden replica of the compact main row (same classes, same tokens, same horizontal inset),
+ * used to decide whether the text fits on one row beside the buttons.
+ */
+.measureLayout {
+  position: absolute;
+  top: 0;
+  left: var(--ci-pad-x);
+  right: var(--ci-pad-x);
+  width: auto;
+  visibility: hidden;
+  pointer-events: none;
+}
+.measureTextarea {
+  field-sizing: fixed;
+  height: var(--ci-line-height);
+  max-height: none;
+  overflow: hidden; /* no scrollbar, which would narrow the wrapping width vs. the real compact row */
+}
+
+.modelSelectorExtra {
+  padding-left: var(--space-md) !important;
+}

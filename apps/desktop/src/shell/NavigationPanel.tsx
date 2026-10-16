@@ -1,13 +1,17 @@
-import React, { useCallback } from 'react';
+import React, { Fragment, useCallback } from 'react';
 import clsx from 'clsx';
 import styles from './NavigationPanel.module.css';
 
 import logoUrl from '../assets/icons/azurine/AzurineMasterLogoStdRes.png';
 
 import { useTheme } from '../theme/ThemeProvider';
+import { useTabs } from '../features/tabs';
+
 import { ContentScaleButton, ScaleButton } from '../components/button';
 import { OverheadText } from '../components/overhead-text';
 import { ResolvableIcon, type ResolvableIconInput } from '../components/icon';
+
+export type NavBottomStatus = 'success' | 'warning' | 'error' | 'none';
 
 export type ConversationItem = {
   key?: string;
@@ -21,6 +25,15 @@ export type CategoryItem = {
   text: string;
   icon: ResolvableIconInput;
   color?: string;
+  onClick?: () => void;
+};
+
+export type NavBottomItem = {
+  key?: string;
+  icon: ResolvableIconInput;
+  status?: NavBottomStatus;
+  badge?: string;
+  useBadge?: boolean;
   onClick?: () => void;
 };
 
@@ -39,29 +52,27 @@ export interface NavigationPanelProps {
   takesSpace?: boolean;
   categoryItems?: CategoryItemGroup[];
   conversationItems?: ConversationItem[];
+  navBottomItems?: NavBottomItem[];
   onMouseEnter?: () => void;
   onMouseLeave?: () => void;
 }
 
 export const NavigationPanel: React.FC<NavigationPanelProps> = ({
   isOpen,
-  // setFn,
   takesSpace,
   categoryItems,
   conversationItems,
+  navBottomItems,
   onMouseEnter,
   onMouseLeave,
 }) => {
   const { theme } = useTheme();
+  const { openTab } = useTabs();
 
   const finalIsOpen = isOpen == true;
   const finalTakesSpace = takesSpace !== false;
   const finalCategoryItems = Array.isArray(categoryItems) ? categoryItems : [];
   const finalConversationItems = Array.isArray(conversationItems) ? conversationItems : [];
-
-  // const handleCollapseClick = useCallback(() => {
-  //   if (typeof setFn === 'function') setFn?.(false);
-  // }, [setFn]);
 
   return (
     <div
@@ -76,13 +87,20 @@ export const NavigationPanel: React.FC<NavigationPanelProps> = ({
       <div className={styles.panelInner}>
         <div className={styles.titleGroup}>
           <div className={clsx(styles.innerTitleGroup, styles.itgLeft)}>
-            <ScaleButton className={styles.majorButton} scaleValue={0.96}>
+            <ScaleButton
+              className={styles.majorButton}
+              scaleValue={0.96}
+              onClick={() => openTab({ tabType: 'home', dedupeKey: 'home' })}
+            >
               <img src={logoUrl} className={styles.majorIcon} alt="App Logo" />
             </ScaleButton>
             <span className={styles.majorTitle}>Vision</span>
           </div>
           <div className={clsx(styles.innerTitleGroup, styles.itgRight)}>
-            <ScaleButton className={styles.titleRightButton}>
+            <ScaleButton
+              className={styles.titleRightButton}
+              onClick={() => openTab({ tabType: 'home', dedupeKey: 'home' })}
+            >
               <ResolvableIcon
                 icon="House"
                 size="100%"
@@ -144,7 +162,10 @@ export const NavigationPanel: React.FC<NavigationPanelProps> = ({
             })}
           </div>
         )}
-        <ScaleButton className={clsx(styles.conversationButton, styles.conversationButtonS)}>
+        <ScaleButton
+          className={clsx(styles.conversationButton, styles.conversationButtonS)}
+          onClick={() => openTab({ tabType: 'conversation' })}
+        >
           <ResolvableIcon
             icon="SquarePen"
             size="calc(var(--space-lg) + var(--space-xxs))"
@@ -184,39 +205,94 @@ export const NavigationPanel: React.FC<NavigationPanelProps> = ({
             })}
         </div>
         <div className={styles.separatorLine} />
-        <ScaleButton className={clsx(styles.conversationButton, styles.conversationButtonS)}>
-          <ResolvableIcon
-            icon="BookMarked"
-            size="calc(var(--space-lg) + var(--space-xxs))"
-            strokeWidth={2}
-            color={theme.text.secondary}
-          />
-          <span className={styles.conversationButtonText}>Memory</span>
-        </ScaleButton>
-        <ScaleButton className={clsx(styles.conversationButton, styles.conversationButtonS)}>
-          <ResolvableIcon
-            icon="Star"
-            size="calc(var(--space-lg) + var(--space-xxs))"
-            strokeWidth={2}
-            color={theme.text.secondary}
-          />
-          <span className={styles.conversationButtonText}>Saved</span>
-        </ScaleButton>
-        <ScaleButton
-          className={clsx(
-            styles.conversationButton,
-            styles.conversationButtonS,
-            styles.bottomExtraGap,
-          )}
-        >
-          <ResolvableIcon
-            icon="Settings"
-            size="calc(var(--space-lg) + var(--space-xxs))"
-            strokeWidth={2}
-            color={theme.text.secondary}
-          />
-          <span className={styles.conversationButtonText}>Settings</span>
-        </ScaleButton>
+        <div className={clsx(styles.bottomDock, styles.bottomDockUp)}>
+          {Array.isArray(navBottomItems) &&
+            navBottomItems.length >= 1 &&
+            navBottomItems.map((item: NavBottomItem, index: number) => {
+              const finalKey: string =
+                typeof item?.key === 'string' ? item.key : `navBottomItem-${index}`;
+              // const finalKey2: string =
+              //   typeof item?.key === 'string' ? `${item.key}2` : `navBottomItem2-${index}`;
+              const finalStatus: NavBottomStatus =
+                typeof item?.status === 'string' ? item.status : 'none';
+              const finalBadge: string = typeof item?.badge === 'string' ? item.badge : '';
+              const finalUseBadge: boolean = item?.useBadge === true;
+
+              return (
+                <Fragment key={finalKey}>
+                  <ScaleButton className={styles.bottomDockItem}>
+                    <ResolvableIcon
+                      icon={item?.icon ?? 'X'}
+                      size="var(--space-xl)"
+                      strokeWidth={2}
+                      color={theme.text.primary}
+                    />
+                    {finalStatus === 'success' ? (
+                      <ResolvableIcon
+                        icon="Check"
+                        size="var(--space-md)"
+                        strokeWidth={3}
+                        color={theme.status.success.text}
+                        className={styles.bottomDockItemSubIcon}
+                      />
+                    ) : finalStatus === 'warning' ? (
+                      <ResolvableIcon
+                        icon="TriangleAlert"
+                        size="var(--space-md)"
+                        strokeWidth={3}
+                        color={theme.brand.primary}
+                        className={styles.bottomDockItemSubIcon}
+                      />
+                    ) : finalStatus === 'error' ? (
+                      <ResolvableIcon
+                        icon="X"
+                        size="var(--space-md)"
+                        strokeWidth={3}
+                        color={theme.status.error.text}
+                        className={styles.bottomDockItemSubIcon}
+                      />
+                    ) : null}
+                    {finalUseBadge && (
+                      <div className={styles.bottomDockItemIdGroup}>
+                        <span className={styles.bottomDockItemIdText}>{finalBadge}</span>
+                      </div>
+                    )}
+                  </ScaleButton>
+                  {index < navBottomItems.length - 1 && (
+                    <div className={styles.bottomDockSeparator} />
+                  )}
+                </Fragment>
+              );
+            })}
+        </div>
+        <div className={clsx(styles.bottomDock, styles.bottomDockDown)}>
+          <ScaleButton className={styles.bottomDockItem}>
+            <ResolvableIcon
+              icon="BookMarked"
+              size="calc(5 * var(--space-xs))"
+              strokeWidth={2}
+              color={theme.text.secondary}
+            />
+          </ScaleButton>
+          <div className={styles.bottomDockSeparator} />
+          <ScaleButton className={styles.bottomDockItem}>
+            <ResolvableIcon
+              icon="Star"
+              size="calc(5 * var(--space-xs))"
+              strokeWidth={2}
+              color={theme.text.secondary}
+            />
+          </ScaleButton>
+          <div className={styles.bottomDockSeparator} />
+          <ScaleButton className={styles.bottomDockItem}>
+            <ResolvableIcon
+              icon="Settings"
+              size="calc(5 * var(--space-xs))"
+              strokeWidth={2}
+              color={theme.text.secondary}
+            />
+          </ScaleButton>
+        </div>
       </div>
     </div>
   );

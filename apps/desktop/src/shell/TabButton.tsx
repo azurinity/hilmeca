@@ -8,17 +8,18 @@ import {
   ResolvableIcon,
   isValidResolvableIcon,
   type ResolvableIconInput,
+  type ResolvableIconProps,
 } from '../components/icon';
 
 export interface TabButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-  icon?: ResolvableIconInput;
+  iconValue?: ResolvableIconInput | ResolvableIconProps;
   text?: string;
   selected?: boolean;
   onClose?: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
 }
 
 export function TabButton({
-  icon,
+  iconValue,
   text,
   selected,
   onMouseEnter,
@@ -33,6 +34,14 @@ export function TabButton({
   const [isHoveringClose, setIsHoveringClose] = useState(false);
 
   const finalSelected = !!selected;
+  const finalIcon: ResolvableIconInput | ResolvableIconProps | null =
+    typeof iconValue === 'object'
+      ? isValidResolvableIcon(iconValue?.icon)
+        ? { ...iconValue, icon: iconValue?.icon ?? null, size: 'var(--space-lg)' }
+        : null
+      : isValidResolvableIcon(iconValue)
+        ? iconValue
+        : null;
 
   const handleMouseEnter = useCallback(
     (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => onMouseEnter?.(e),
@@ -63,15 +72,21 @@ export function TabButton({
       className={clsx(styles.tabButton, className, finalSelected && styles.tabButtonSelected)}
       {...props}
     >
-      {isValidResolvableIcon(icon) && (
+      {/* @ts-ignore */}
+      {isValidResolvableIcon(finalIcon) ? (
         <ResolvableIcon
-          icon={icon}
+          /* @ts-ignore */
+          icon={finalIcon}
           size="var(--space-lg)"
-          strokeWidth={2}
+          strokeWidth={2.5}
           color={theme.text.disabled}
           className={styles.tabIcon}
         />
-      )}
+      ) : /* @ts-ignore */
+      typeof finalIcon === 'object' && isValidResolvableIcon(finalIcon?.icon) ? (
+        /* @ts-ignore */
+        <ResolvableIcon {...finalIcon} />
+      ) : null}
       {typeof text === 'string' && text.length >= 1 && (
         <span
           className={clsx(styles.tabText, finalSelected && styles.tabTextSelected)}

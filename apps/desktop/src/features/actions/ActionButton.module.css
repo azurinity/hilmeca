@@ -1,0 +1,98 @@
+.button {
+  --action-button-size: calc(9 * var(--space-xs));
+
+  box-sizing: border-box;
+  flex: 0 0 auto; /* never stretched or squashed by the parent row */
+  width: auto;
+  min-width: var(--action-button-size);
+  height: var(--action-button-size);
+  min-height: 0;
+
+  border-radius: 9999px;
+
+  display: inline-flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  gap: var(--space-sm);
+}
+
+/*
+ * Padding is declared with doubled specificity: BaseButton.module.css sets `padding: 0` on its
+ * own single-class `.button`, and which one wins would otherwise depend on stylesheet order.
+ */
+.button.buttonSingularIcon {
+  width: var(--action-button-size); /* icon-only: square, circular */
+  padding: calc(3 * var(--space-xxs));
+}
+.button.buttonMultipleElements {
+  padding-top: var(--space-xs);
+  padding-bottom: var(--space-xs);
+  padding-left: var(--space-sm);
+  padding-right: var(--space-sm);
+}
+
+.buttonHighlighted {
+  background-color: var(--brand-primary);
+  background: linear-gradient(
+    135deg,
+    var(--components-button-primary-gradient-start),
+    var(--components-button-primary-gradient-end)
+  ) !important;
+}
+/* BaseButton's hover only changes background-color, which a gradient fully covers. */
+.buttonHighlighted:hover:not(:disabled) {
+  filter: brightness(1.08);
+}
+
+.buttonText {
+  flex: 0 1 auto;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  font-family: 'Default-Regular';
+  line-height: 1.2;
+  text-align: left;
+}
+.buttonNormalText {
+  font-size: var(--font-body);
+}
+.buttonNormalTextPrimary {
+  color: var(--text-primary) !important;
+}
+.buttonNormalTextSecondary {
+  color: var(--text-secondary) !important;
+}
+.buttonNormalTextActive {
+  color: var(--brand-primary) !important;
+}
+.buttonNormalTextDisabled {
+  color: var(--text-disabled) !important;
+}
+.buttonExtraText {
+  font-size: var(--font-lower-body);
+}
+.buttonExtraTextNormal {
+  color: var(--text-muted) !important;
+}
+.buttonExtraTextActive {
+  color: var(--text-disabled) !important;
+}
+
+/*
+ * ActionButton.tsx passes size="100%" / "80%", which resolve against the button's content
+ * height. Width is forced to auto (beating the inline width/height that ResolvableIcon sets on
+ * <img>/mask fallbacks) and derived from the height, so icons stay square and never
+ * stretch to the full button width next to text.
+ */
+.buttonIcon {
+  flex: 0 0 auto;
+  min-width: 0;
+  min-height: 0;
+  width: auto !important;
+  aspect-ratio: 1 !important;
+}

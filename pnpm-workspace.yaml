@@ -10,3 +10,5 @@ allowBuilds:
   esbuild: true
 
 blockExoticSubdeps: false
+minimumReleaseAgeExclude:
+  - electron@44.7.2

@@ -4,10 +4,16 @@ import styles from './Shell.module.css';
 
 import { useTheme } from '../theme/ThemeProvider';
 import { useAppWindow } from '../context/AppWindowContext';
-import { ContentScaleButton } from '../components/button';
+import { TabsViewport, useTabs } from '../features/tabs';
+import { ContentScaleButton, ScaleButton } from '../components/button';
 import { ResolvableIcon, type ResolvableIconInput } from '../components/icon';
 
-import { NavigationPanel, type CategoryItemGroup, type ConversationItem } from './NavigationPanel';
+import {
+  NavigationPanel,
+  type CategoryItemGroup,
+  type ConversationItem,
+  type NavBottomItem,
+} from './NavigationPanel';
 import { NavigationCluster } from './NavigationCluster';
 import { RibbonButton } from './RibbonButton';
 import { TabButton } from './TabButton';
@@ -46,6 +52,7 @@ export const Shell: React.FC = () => {
   const { theme } = useTheme();
   const { windowTitle, windowIcon, windowTitleVisible, windowIconVisible, windowInfoVisible } =
     useAppWindow();
+  const { state, focusTab, closeTab } = useTabs();
   const [isMaximized, setIsMaximized] = useState(false);
   const [isPanelOpen, setIsPanelOpen] = useState(true);
   const [isMenuHovered, setIsMenuHovered] = useState(false);
@@ -239,11 +246,11 @@ export const Shell: React.FC = () => {
     { text: 'Help' },
   ];
 
-  const tabItemsTest: TabItem[] = [
-    { icon: 'House', text: 'Home', selected: true },
-    { icon: 'Waypoints', text: 'Connection' },
-    { icon: 'Wrench', text: 'Config: TestCharacter1' },
-    { icon: 'Settings', text: 'Settings: User' },
+  const navBottomItems: NavBottomItem[] = [
+    { icon: 'Mic', status: 'success', badge: '3', useBadge: true },
+    { icon: 'Video', status: 'success', badge: '1', useBadge: true },
+    { icon: 'Volume2', status: 'success', badge: '3', useBadge: true },
+    { icon: 'Monitor', status: 'success', badge: '1', useBadge: true },
   ];
 
   useEffect(() => {
@@ -288,13 +295,10 @@ export const Shell: React.FC = () => {
   // corner styling regardless of open/closed state, since `.contents` is
   // always full-width in that mode.
   const contentsChanged = !isPanelOpen && panelTakesSpace;
-  // console.log(`R: ${windowInfoVisible && (finalWindowIconVisible || finalWindowTitleVisible)}`);
+
   return (
     <div className={styles.backdrop}>
-      <NavigationCluster
-        onMajorClick={() => console.log('Major clicked!')}
-        onMinorClick={handleMenuButtonClick}
-      />
+      <NavigationCluster onMajorClick={() => {}} onMinorClick={handleMenuButtonClick} />
       <header className={styles.titleBar}>
         {windowInfoVisible && (finalWindowIconVisible || finalWindowTitleVisible) && (
           <div className={styles.titleInfoContainer}>
@@ -389,32 +393,36 @@ export const Shell: React.FC = () => {
       <main className={styles.restOfLayout}>
         <NavigationPanel
           isOpen={isPanelOpen}
-          // setFn={setIsPanelOpen}
           takesSpace={panelTakesSpace}
           categoryItems={navCategoryItems}
           conversationItems={navConvoItemsTest}
+          navBottomItems={navBottomItems}
           onMouseEnter={handlePanelHoverEnter}
           onMouseLeave={handlePanelHoverLeave}
         />
         <div className={clsx(styles.contents, contentsChanged && styles.contentsChanged)}>
           <div className={styles.tabContainer}>
-            {tabItemsTest.map((item: TabItem, index: number) => {
-              const finalKey = typeof item?.key === 'string' ? item.key : `${item?.text}-${index}`;
+            {state.tabs.map((tab, index) => {
+              const tabId = tab.id ?? 'noTabId';
+              const finalKey = `${tabId ?? ''}-${tab.dedupeKey ?? ''}-${index}`;
 
               return (
                 <TabButton
                   key={finalKey}
-                  icon={item?.icon}
-                  text={item?.text}
-                  selected={!!item?.selected}
-                  onMouseEnter={item?.onMouseEnter ?? undefined}
-                  onMouseLeave={item?.onMouseLeave ?? undefined}
-                  onClick={item?.onClick ?? undefined}
+                  iconValue={tab.icon}
+                  text={tab.title}
+                  selected={state.activeTabId === tab.id}
+                  // onMouseEnter={item?.onMouseEnter ?? undefined}
+                  // onMouseLeave={item?.onMouseLeave ?? undefined}
+                  onClick={() => focusTab(tab.id)}
+                  onClose={() => closeTab(tab.id)}
                 />
               );
             })}
           </div>
-          <div className={styles.viewport}></div>
+          <div className={styles.viewport}>
+            <TabsViewport />
+          </div>
         </div>
       </main>
     </div>

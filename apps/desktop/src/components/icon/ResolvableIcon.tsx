@@ -19,6 +19,8 @@ export interface ResolvableIconProps extends Omit<LucideProps, 'style' | 'color'
   className?: string;
 }
 
+export type ResolvableIconConfig = Omit<ResolvableIconProps, 'icon'>
+
 const REACT_FORWARD_REF_TYPE = Symbol.for('react.forward_ref');
 const REACT_MEMO_TYPE = Symbol.for('react.memo');
 
