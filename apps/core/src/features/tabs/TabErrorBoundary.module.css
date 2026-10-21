@@ -1,0 +1,41 @@
+.canvas {
+  width: 100%;
+  height: 100%;
+  background: transparent;
+
+  gap: var(--space-md);
+
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: center;
+  overflow: auto;
+}
+
+.textSpan {
+  max-width: 80%;
+  font-family: 'Default-Regular', sans-serif;
+  font-size: var(--font-upper-body);
+  text-align: center;
+  color: var(--text-primary);
+}
+
+.button.button {
+  background-color: var(--background-surface-variant) !important;
+
+  border-radius: var(--space-sm);
+  margin-top: var(--space-sm);
+  padding-top: var(--space-sm);
+  padding-left: var(--space-xl);
+  padding-right: var(--space-xl);
+  padding-bottom: var(--space-sm);
+  gap: var(--space-sm);
+
+  display: inline-flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}

@@ -1,8 +1,150 @@
+/* src/index.css */
+
+@font-face {
+  font-family: 'Default-ExtraLight';
+  src: url('./assets/fonts/IBMPlexSans-ExtraLight.ttf') format('truetype');
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Default-ExtraLightItalic';
+  src: url('./assets/fonts/IBMPlexSans-ExtraLightItalic.ttf') format('truetype');
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'Default-Light';
+  src: url('./assets/fonts/IBMPlexSans-Light.ttf') format('truetype');
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Default-LightItalic';
+  src: url('./assets/fonts/IBMPlexSans-LightItalic.ttf') format('truetype');
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'Default-Thin';
+  src: url('./assets/fonts/IBMPlexSans-Thin.ttf') format('truetype');
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Default-ThinItalic';
+  src: url('./assets/fonts/IBMPlexSans-ThinItalic.ttf') format('truetype');
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'Default-Regular';
+  src: url('./assets/fonts/IBMPlexSans-Regular.ttf') format('truetype');
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Default-RegularItalic';
+  src: url('./assets/fonts/IBMPlexSans-RegularItalic.ttf') format('truetype');
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'Default-Medium';
+  src: url('./assets/fonts/IBMPlexSans-Medium.ttf') format('truetype');
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Default-MediumItalic';
+  src: url('./assets/fonts/IBMPlexSans-MediumItalic.ttf') format('truetype');
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'Default-SemiBold';
+  src: url('./assets/fonts/IBMPlexSans-SemiBold.ttf') format('truetype');
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Default-SemiBoldItalic';
+  src: url('./assets/fonts/IBMPlexSans-SemiBoldItalic.ttf') format('truetype');
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'Default-Bold';
+  src: url('./assets/fonts/IBMPlexSans-Bold.ttf') format('truetype');
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Default-BoldItalic';
+  src: url('./assets/fonts/IBMPlexSans-BoldItalic.ttf') format('truetype');
+  font-style: italic;
+}
+
+/* Unified Desktop App Base Configuration */
+html, body {
+  background-color: #050505; /* Matches your darkTheme.background.canvas */
+  color: #f9fafb;            /* Matches your darkTheme.text.primary */
+  transition: background-color 0.15s ease;
+}
+
 body {
-  font-family:
-    -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial,
-    sans-serif;
-  margin: auto;
-  max-width: 38rem;
-  padding: 2rem;
+  /* Safely applies your loaded font family with standard OS fallback values */
+  font-family: 'Default-Regular', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  overflow: hidden; /* Prevents vertical/horizontal viewport bouncing */
+  user-select: none; /* Disables web text highlighting */
+  width: 100vw;
+  height: 100vh;
+}
+
+#root {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 1. Root scrollbar container configuration */
+::-webkit-scrollbar {
+  width: 8px;              /* Width for vertical scrollbars */
+  height: 8px;             /* Height for horizontal scrollbars */
+  background: transparent; /* No background track container */
+}
+
+/* 2. Scrollbar Track (Removes background and internal separator borders) */
+::-webkit-scrollbar-track {
+  background: transparent;
+  border: none;
+}
+
+/* 3. Scrollbar Thumb (The actual draggable handle) */
+::-webkit-scrollbar-thumb {
+  /* PLACEHOLDER COLOR: Swap this out with your theme token (e.g., var(--text-muted) or #444) */
+  background-color: var(--text-disabled); 
+  
+  border-radius: 9999px;   /* Ensures a smooth 50% pill capsule edge shape */
+  border: none;            /* Strips out native separator lines and margins */
+}
+
+/* 4. Hover states for the draggable handle */
+::-webkit-scrollbar-thumb:hover {
+  /* PLACEHOLDER COLOR FOR HOVER STATE */
+  background-color: var(--text-muted); 
+}
+
+/* 5. Scrollbar Buttons (Removes the Up/Down/Left/Right arrow buttons completely) */
+::-webkit-scrollbar-button {
+  display: none !important;
+  width: 0;
+  height: 0;
+}
+
+/* 6. Corner anchor space where horizontal and vertical scrollbars meet */
+::-webkit-scrollbar-corner {
+  background: transparent;
 }

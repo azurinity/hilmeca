@@ -6,9 +6,10 @@ nodeVersion: 24.16.0
 nodeLinker: 'hoisted'
 engineStrict: true
 allowBuilds:
+  electron: true
   electron-winstaller: true
   esbuild: true
 
 blockExoticSubdeps: false
 minimumReleaseAgeExclude:
-  - electron@44.7.2
+  - electron@44.7.2 || 44.8.0
